@@ -6,6 +6,8 @@
 package lab5;
 
 import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,6 +15,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,31 +29,26 @@ import java.net.URI;
  */
 public class CatalogUtil {
     public static void save(Catalog catalog) throws IOException {
-        try (var oos = new ObjectOutputStream(new FileOutputStream(catalog.getPath())))
+        try
         {
-           oos.writeObject(catalog);
+           BufferedWriter writer = Files.newBufferedWriter(Paths.get(catalog.getPath()));
+           writer.append(catalog.getName()).append("\n").append(catalog.getPath()).append("\n");
+           for(Document d : catalog.getDocuments())
+           {
+               writer.append(d.getId()).append("\n").append(d.getName()).append("\n").append(d.getLocation()).append("\n");
+               for(Map.Entry<String, Object> tg : d.getTags().entrySet())
+               {
+                   writer.append(tg.getKey()).append('\n').append(tg.getValue().toString()).append('\n');
+               }
+           }
+           writer.flush();
         }
-        catch(Exception e)
+        catch(IOException e)
         {
             System.out.println(e.getMessage());
         }
     }
-    public static Catalog load(String path) throws InvalidCatalogException {
-        Catalog cat = new Catalog("", "");
-
-        try (FileInputStream fis = new FileInputStream(path); ObjectInputStream ois = new ObjectInputStream(fis);) 
-        {
-          cat = (Catalog) ois.readObject();
-        }
-        catch (IOException ioe) {
-          throw new InvalidCatalogException(ioe);
-        }
-        catch (ClassNotFoundException cnfe) {
-          System.out.println("Error loading catalog");
-        }
-        
-        return cat;
-    }
+    
     public static void view(Document doc) {
     
     File file = new File(doc.getLocation());
@@ -65,11 +69,13 @@ public class CatalogUtil {
     try{
         desktop.browse(new URI(doc.getLocation()));
     }
-    catch(Exception e)
+    catch(IOException e)
     {
         System.out.println(e.getMessage());
+    }   
+    catch (URISyntaxException ex) {
+        System.out.println(ex.getMessage());
     }
-    
     
     }
     

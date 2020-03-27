@@ -6,50 +6,43 @@
 package lab5;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
  public static void main(String args[]) {
- Main app = new Main();
- app.testCreateSave();
- app.testLoadView();
+     Scanner scanner = new Scanner(System.in);
+     String catName;
+     String path;
+     Catalog loadedCat = new Catalog();
+     String cmdName;
+     boolean first = true;
+     while(true)
+     {
+         try{
+             System.out.println("Java Console> ");
+             cmdName = scanner.next();
+             if( cmdName.contains("load"))
+                 loadedCat = LoadCommand.runCommand(scanner.next());
+             if(cmdName.contains("list"))
+             {
+                 var lCMD = new ListCommand();
+                 lCMD.runCommand(loadedCat);
+             }
+             if(cmdName.contains("view"))
+                 ViewCommand.runCommand(loadedCat.findById(scanner.next()));
+             if(cmdName.contains("html"))
+                {
+                    HtmlReportCommand.runCommand(loadedCat);
+                    
+                }
+        }
+         catch(Exception e)
+         {
+             System.out.println("Invalid arguments. Please try again");
+         }
+             
+         
+     }
  }
 
- private void testCreateSave() {
- Catalog catalog = new Catalog("Java Resources", "e:/java/catalog.ser");
- Document doc = new Document("java1", "Java Course 1",
- "https:////profs.info.uaic.ro/~acf/java/slides/en/intro_slide_en.pdf");
- 
- Document doc2 = new Document("random", "Random file", "e:/random.txt");
- doc.addTag("type", "Slides");
- catalog.add(doc);
- catalog.add(doc2);
-
- try
- {
-    CatalogUtil.save(catalog);
- }
- catch(IOException e)
- {
-     System.out.println(e.getMessage());
-     
- }
- 
- }
-
- private void testLoadView() {
-    Catalog catalog = new Catalog();
-    try{
-       catalog = CatalogUtil.load("e:/java/catalog.ser");
-      
-        Document doc = catalog.findById("java1");
-        CatalogUtil.view(doc);
-        
-        var doc2 = catalog.findById("random");
-        CatalogUtil.view(doc2);
-    }
-    catch(InvalidCatalogException e)
-    {
-        System.out.println(e.getMessage());
-    }
- }
 }

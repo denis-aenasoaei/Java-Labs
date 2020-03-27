@@ -81,6 +81,7 @@ public class Catalog implements Serializable {
  }
  public Document findById(String id) {
     for (Document doc : documents) {
+        System.out.println(doc.getId());
         if (doc.getId().equals(id)) {
             return doc;
         }
