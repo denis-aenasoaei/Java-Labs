@@ -46,7 +46,7 @@ public class DrawingPanel extends JPanel {
  }
  private void drawShape(int x, int y) {
     Random random = new Random();
-    int radius = random.nextInt(255);
+    int radius = frame.configPanel.getShapeSize();
     int sides = frame.configPanel.getSides();
     int c1,c2,c3,opac;
     if(frame.configPanel.colorComboBox.getSelectedItem().toString().contains("Bl"))
@@ -64,7 +64,18 @@ public class DrawingPanel extends JPanel {
     opac = (int)(random.nextInt(255));
     Color color= new Color(c1,c2,c3,opac);
     graphics.setColor(color);
-    graphics.fill(new RegularPolygon(x, y, radius, sides));
+    if(frame.configPanel.sidesField.isVisible())
+        //graphics.fill(new RegularPolygon(x, y, radius, sides));
+        {
+            frame.configPanel.polyShapes.add(new Shapes(sides, radius, color,x,y));
+            frame.configPanel.polys.addItem(frame.configPanel.polyShapes.size());
+        }
+    else{
+        
+        frame.configPanel.circleShapes.add(new Shapes(0,radius, color,x,y));
+        frame.configPanel.circles.addItem(frame.configPanel.circleShapes.size());
+    }
+        //graphics.fillOval(x-radius ,y-radius , 2*radius, 2*radius);
  }
  @Override
  public void update(Graphics g) {

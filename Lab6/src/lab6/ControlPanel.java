@@ -5,8 +5,11 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 
@@ -17,6 +20,7 @@ public class ControlPanel extends JPanel {
     JButton resetBtn = new JButton("Reset");
     JButton loadBtn = new JButton("Load");
     
+    JFileChooser fileChooser = new JFileChooser();
     public ControlPanel(MainFrame frame) 
     {
         this.frame = frame; 
@@ -28,16 +32,24 @@ public class ControlPanel extends JPanel {
        add(exitBtn);
        add(loadBtn);
        add(resetBtn);
+       
        saveBtn.addActionListener(this::save);
        loadBtn.addActionListener(this::load);
        resetBtn.addActionListener(this::reset);
        exitBtn.addActionListener(this::exit);
+       fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
     }
     
  private void save(ActionEvent e) {
  
      try {
-        ImageIO.write(frame.canvas.image, "jpg", new File("e:/test.png"));
+         int result = fileChooser.showSaveDialog(this);
+         if (result == JFileChooser.APPROVE_OPTION) {
+             System.out.println(fileChooser.getSelectedFile());
+             File chosen =  fileChooser.getSelectedFile();
+            ImageIO.write(frame.canvas.image, "png", new File(chosen.getAbsolutePath()));
+         }
+         
     }
      catch (IOException ex)
      {
@@ -47,8 +59,14 @@ public class ControlPanel extends JPanel {
  private void load(ActionEvent e) {
       try 
       {
-        File toLoad = new File("e:/test.png");          
-        frame.canvas.image = ImageIO.read(toLoad);
+          int result = fileChooser.showOpenDialog(saveBtn);
+          if (result == JFileChooser.APPROVE_OPTION) {
+              
+              System.out.println(fileChooser.getSelectedFile());
+              var toLoad = ImageIO.read(fileChooser.getSelectedFile());
+              frame.setImage(toLoad);
+              frame.canvas.repaint();
+        }
       }
       catch (IOException ex) 
       {
