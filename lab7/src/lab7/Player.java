@@ -33,9 +33,16 @@ public class Player implements Runnable {
         
         while(game.tokensLeft() != 0)
         {
+            
             synchronized(game){
             this.notifyAll();
-                
+            System.out.println("Available tokens");
+            for(Token t : game.board.tokens)
+            {
+                System.out.printf("%d ",t.value);
+            }
+            System.out.println("");
+            
             System.out.println(name + ", write the index of the token you want to take:");
             Scanner scanner = new Scanner(System.in);
             int answear;
@@ -50,12 +57,6 @@ public class Player implements Runnable {
             extractedTokens.add(game.tokenAt(answear));
             game.removeToken(answear);
             
-            System.out.println("Available tokens");
-            for(Token t : game.board.tokens)
-            {
-                System.out.printf("%d ",t.value);
-            }
-            System.out.println("");
             }
         }
             

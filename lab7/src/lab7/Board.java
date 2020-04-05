@@ -18,7 +18,7 @@ public class Board {
     public Board(int numberOfTokens, int maxValue){ 
        for(int i=0;i<numberOfTokens;i++)
        {
-           tokens.add(new Token(maxValue));
+           tokens.add(new Token(i+1));
        }
     }
     
