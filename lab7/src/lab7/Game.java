@@ -33,10 +33,7 @@ public class Game {
         {
             new Thread((Runnable) player).start();
         }
-        synchronized(this)
-        {
-            this.notifyAll();
-        }
+        
         while(board.tokensLeft() != 0)
         {
              
