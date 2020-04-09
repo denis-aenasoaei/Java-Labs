@@ -17,11 +17,13 @@ public class Lab7 {
     public static void main(String[] args) {
         Board board = new Board(15,30);
         Game game = new Game(board);
-        Player player1 = new Player("Gigi", game);
-        Player player2 = new Player("Cornel", game);
+        Player player1 = new RandomPlayer("Gigi", game);
+        Player player2 = new ManualPlayer("Cornel", game);
+        Player player3 = new SmartPlayer("Ein", game); 
         
         game.addPlayer(player1);
         game.addPlayer(player2);
+        game.addPlayer(player3);
         
         game.startGame();
     }

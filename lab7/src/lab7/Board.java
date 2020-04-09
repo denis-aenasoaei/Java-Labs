@@ -21,6 +21,11 @@ public class Board {
            tokens.add(new Token(i+1));
        }
     }
+
+    public Vector<Token> getTokens() {
+        return tokens;
+    }
+    
     
     public void removeToken(int index)
     {

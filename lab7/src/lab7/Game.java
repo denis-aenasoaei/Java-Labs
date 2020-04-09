@@ -27,18 +27,34 @@ public class Game {
     
     public void startGame()
     {
+        
         if(board == null || players == null || players.isEmpty())
             return;
+        
+        DaemonThread timeKeeper = new DaemonThread(this);
+        timeKeeper.setDaemon(true);
+        
+        timeKeeper.start();
+        
         for(Player player : players)
         {
             new Thread((Runnable) player).start();
         }
         
+        
         while(board.tokensLeft() != 0)
         {
-             
         }
         
+        for(Player p : players)
+        {
+            System.out.println(p.getClass().getName() + p.name + " has gathered the following tokens\n");
+            for(Token t : p.extractedTokens)
+            {
+                System.out.printf("%d ",t.value);
+            }
+            System.out.println("");
+        }
         //ToDo - See who won
            
     }

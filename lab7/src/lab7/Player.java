@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author denis
  */
-public class Player implements Runnable {
+public abstract class Player {
     ArrayList<Token> extractedTokens = new ArrayList<>();
     String name;
     final Game game;
@@ -28,39 +28,6 @@ public class Player implements Runnable {
         return name;
     }
 
-    @Override
-    public synchronized void run() {
-        
-        while(game.tokensLeft() != 0)
-        {
-            
-            synchronized(game){
-            this.notifyAll();
-            System.out.println("Available tokens");
-            for(Token t : game.board.tokens)
-            {
-                System.out.printf("%d ",t.value);
-            }
-            System.out.println("");
-            
-            System.out.println(name + ", write the index of the token you want to take:");
-            Scanner scanner = new Scanner(System.in);
-            int answear;
-            
-            while((answear = scanner.nextInt()) > game.tokensLeft() -1 && game.tokensLeft() != 0)
-            {
-                System.out.println("Invalid token for " + name + ", enter it again");
-            }
-            if(game.tokensLeft() == 0)
-                break;
-            
-            extractedTokens.add(game.tokenAt(answear));
-            game.removeToken(answear);
-            
-            }
-        }
-            
-        }
         
     }
     
