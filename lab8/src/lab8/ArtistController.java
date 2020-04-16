@@ -6,9 +6,6 @@
 package lab8;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,24 +25,26 @@ public class ArtistController {
         }
         
     }
-    public static void findByName( String name)
+    public static Artist findByName( String name)
     {
         try {
             Database db = Database.getInstance();
             var stmt = db.connection.createStatement();
             String sql = "Select * from artists where name like'%" + name+"%'";
             var rs = stmt.executeQuery(sql);
-            var metaDataRS = rs.getMetaData();
+            Artist ar = new Artist();
+            
             while(rs.next())
             {
-                for(int i=1; i<metaDataRS.getColumnCount(); i++)
-                {
-                    System.out.println(rs.getObject(i).toString());
-                }
+                ar.setId(rs.getInt(1));
+                ar.setName(rs.getString(2));
+                ar.setCountry(rs.getString(3));
             }
+            return ar;
             
         } catch (SQLException ex) {
-            Logger.getLogger(ArtistController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error finding artist\n" + ex.getMessage());
         }
+        return null;
     }
 }

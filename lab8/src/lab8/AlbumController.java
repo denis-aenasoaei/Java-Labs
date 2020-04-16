@@ -28,23 +28,23 @@ public class AlbumController {
         }
         
     }
-    public static void  findByArtist(int artistId)
+    public static ArrayList<Album> findByArtist(int artistId)
     {
         try {
             Database db = Database.getInstance();
             var stmt = db.connection.createStatement();
             String sql = "Select * from albums where artist_id = " + artistId;
             var rs = stmt.executeQuery(sql);
-            var metaDataRS = rs.getMetaData();
+            Artist ar = new Artist();
+            ArrayList<Album> albums = new ArrayList<>();
             while(rs.next())
             {
-                for(int i=1; i<metaDataRS.getColumnCount(); i++)
-                {
-                    System.out.println(rs.getObject(i).toString());
-                }
+                albums.add(new Album(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getInt(4)));
             }
+            return albums;
         } catch (SQLException ex) {
             System.out.println("Error while trying to get album\n" + ex.getMessage() );
         }
+        return null;
     }
 }
