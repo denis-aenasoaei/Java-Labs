@@ -31,7 +31,7 @@ public class GameClient {
             String request = "";
             while(!request.equals("exit"))
             {
-                request = commandReader.next().toLowerCase();
+                request = commandReader.nextLine().toLowerCase();
                 out.println(request);
                 String response = in.readLine ();
                 System.out.println(response);
