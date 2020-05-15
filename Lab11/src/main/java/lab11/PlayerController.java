@@ -23,17 +23,16 @@ public class PlayerController {
             while(rs.next()){
                 players.add(new Player(rs.getString(1)));
             }
-            for(var p :players)
-            {
-                System.out.println(p.name);
-            }
             con.close();
         }
         catch(Exception e)
         {
             System.out.println(e.toString());
         }
-        return players;
+        if (players.isEmpty())
+            throw new NotFoundException("Could not find players");
+        else
+            return players;
     }
     @PostMapping
     public void addPlayer(@RequestParam("name") String name)
@@ -43,7 +42,9 @@ public class PlayerController {
             Connection con=DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521:xe","student","STUDENT");
             Statement stmt=con.createStatement();
-            boolean rs=stmt.execute("insert into players values ('" + name + "')");
+            int rs=stmt.executeUpdate("insert into players values ('" + name + "')");
+            if(rs==0)
+                throw new NotFoundException("Could not update, player does not exist");
             con.close();
         }
         catch(Exception e)
@@ -59,30 +60,34 @@ public class PlayerController {
             Connection con=DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521:xe","student","STUDENT");
             Statement stmt=con.createStatement();
-            boolean rs=stmt.execute("update players set name = '"+ newName + "' where name = '" + oldName +"'");
+            int rs=stmt.executeUpdate("update players set name = '"+ newName + "' where name = '" + oldName +"'");
+            if(rs == 0)
+                throw new NotFoundException("Could not find the player whose name is to change");
             con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
-        catch(Exception e)
-        {
-            System.out.println(e.toString());
-        }
+
+
     }
     @DeleteMapping
     public void deletePlayer(@RequestParam("name") String name)
     {
-        try{
+        try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection con=DriverManager.getConnection(
+
+        Connection con=DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521:xe","student","STUDENT");
             Statement stmt=con.createStatement();
-            boolean rs=stmt.execute("delete from players where name = '" + name + "'");
+            int rs=stmt.executeUpdate("delete from players where name = '" + name + "'");
 
+            if(rs == 0)
+                throw new NotFoundException("Could not find the player, did not delete");
             con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
-        catch(Exception e)
-        {
-            System.out.println(e.toString());
-        }
+
     }
 
 }

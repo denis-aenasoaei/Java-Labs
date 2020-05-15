@@ -1,0 +1,25 @@
+Alias name: tomcat
+Creation date: May 15, 2020
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=Denis Aenasoaei, OU=UAIC, O=FII, L=Iasi, ST=Romania, C=Ro
+Issuer: CN=Denis Aenasoaei, OU=UAIC, O=FII, L=Iasi, ST=Romania, C=Ro
+Serial number: 7d520b4c
+Valid from: Fri May 15 02:53:21 EEST 2020 until: Mon May 13 02:53:21 EEST 2030
+Certificate fingerprints:
+         SHA1: 26:84:21:92:DF:E5:27:43:4E:C5:9D:01:BE:92:3C:E1:B1:96:12:65
+         SHA256: 7B:87:99:48:72:D3:F7:BC:4D:67:DA:B8:6A:18:E0:01:4E:3B:68:6E:69:6B:33:85:DA:E2:81:9B:56:44:BD:D7
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: F7 E1 1C E5 CF 87 D3 EF   59 25 95 E4 CD CC 5A 98  ........Y%....Z.
+0010: 4B EB 71 B6                                        K.q.
+]
+]

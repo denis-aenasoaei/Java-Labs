@@ -3,19 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package lab11;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- *
- * @author denis
- */
 class ClientThread extends Thread {
     private Socket socket = null ;
     public ClientThread (Socket socket) 
@@ -33,14 +30,7 @@ class ClientThread extends Thread {
         {
             
             String request = in.readLine();
-            if(request.equals("exit"))
-            {
-                stop = true;
-                
-                out.println("Server stopped");
-                out.flush();
-                GameServer.closeServerSocket();
-            }
+
             if(request.contains("create"))
             {
                 Player player1 = new Player(this);
@@ -77,7 +67,10 @@ class ClientThread extends Thread {
                 }
                 
                 GameServer.deleteGame(game);
-                
+                var gc = new GameController();
+                Date d = new Date();
+                gc.saveGame(game.player1.name, game.player2.name, d, game.gameId,game.winner);
+
                 stop = true;
             }
             if(request.contains("join"))
@@ -120,10 +113,10 @@ class ClientThread extends Thread {
                     out.flush();
                 }
                 else{
-                    out.println("You lost, exiting...");
+                    out.println("You won, exiting...");
                     out.flush();
                 }
-                
+
                 stop = true;
             }
             
